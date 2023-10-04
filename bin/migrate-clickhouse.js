@@ -109,16 +109,15 @@ program
   .option("-f --file <file>", "use a custom config file")
   .action(options => {
     global.options = options;
-    migrateClickhouse.database
-      .connect()
-      .then(({db, client}) => migrateClickhouse.status(db, client))
-      .then(statusItems => printStatusTable(statusItems))
-      .then(() => {
-        process.exit(0);
-      })
-      .catch(err => {
-        handleError(err);
-      });
+
+      migrateClickhouse.status(migrateClickhouse.database)
+          .then(statusItems => printStatusTable(statusItems))
+          .then(() => {
+              process.exit(0);
+          })
+          .catch(err => {
+              handleError(err);
+          });
   });
 
 program.parse(process.argv);
