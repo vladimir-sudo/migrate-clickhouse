@@ -1,6 +1,6 @@
 {
   "name": "migrate-clickhouse",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A database migration tool for Clickhouse in Node",
   "main": "lib/migrate-clickhouse.js",
   "bin": {

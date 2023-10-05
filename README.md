@@ -1,7 +1,11 @@
 <p align="center">
     <img src="/migrate-clickhouse-logo.png" alt="migrate-clickhouse database migration tool for Node.js"/>
 
-[![Build Status](https://img.shields.io/travis/vladimir-sudo/migrate-clickhouse.svg?style=flat)](https://travis-ci.org/vladimir-sudo/migrate-clickhouse) [![Coverage Status](https://coveralls.io/repos/github/vladimir-sudo/migrate-clickhouse/badge.svg?branch=master)](https://coveralls.io/r/vladimir-sudo/migrate-clickhouse) [![NPM](https://img.shields.io/npm/v/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) [![Downloads](https://img.shields.io/npm/dm/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) [![Dependencies](https://david-dm.org/vladimir-sudo/migrate-clickhouse.svg)](https://david-dm.org/vladimir-sudo/migrate-clickhouse) [![Known Vulnerabilities](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse/badge.svg)](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse)
+[![Build Status](https://img.shields.io/travis/vladimir-sudo/migrate-clickhouse.svg?style=flat)](https://travis-ci.org/vladimir-sudo/migrate-clickhouse) 
+[![Coverage Status](https://coveralls.io/repos/github/vladimir-sudo/migrate-clickhouse/badge.svg?branch=master)](https://coveralls.io/r/vladimir-sudo/migrate-clickhouse) 
+[![NPM](https://img.shields.io/npm/v/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) 
+[![Downloads](https://img.shields.io/npm/dm/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) 
+[![Known Vulnerabilities](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse/badge.svg)](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse)
 
 [![tippin.me](https://badgen.net/badge/%E2%9A%A1%EF%B8%8Ftippin.me/@vladimir-sudo/F0918E)](https://tippin.me/@vladimir-sudo)
 
