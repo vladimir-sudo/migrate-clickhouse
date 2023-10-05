@@ -1,23 +1,23 @@
 <p align="center">
-    <img src="/migrate-clickhouse-logo.png" alt="migrate-mongo database migration tool for Node.js"/>
+    <img src="/migrate-clickhouse-logo.png" alt="migrate-clickhouse database migration tool for Node.js"/>
 
-[![Build Status](https://img.shields.io/travis/seppevs/migrate-mongo.svg?style=flat)](https://travis-ci.org/seppevs/migrate-mongo) [![Coverage Status](https://coveralls.io/repos/github/seppevs/migrate-mongo/badge.svg?branch=master)](https://coveralls.io/r/seppevs/migrate-mongo) [![NPM](https://img.shields.io/npm/v/migrate-mongo.svg?style=flat)](https://www.npmjs.org/package/migrate-mongo) [![Downloads](https://img.shields.io/npm/dm/migrate-mongo.svg?style=flat)](https://www.npmjs.org/package/migrate-mongo) [![Dependencies](https://david-dm.org/seppevs/migrate-mongo.svg)](https://david-dm.org/seppevs/migrate-mongo) [![Known Vulnerabilities](https://snyk.io/test/github/seppevs/migrate-mongo/badge.svg)](https://snyk.io/test/github/seppevs/migrate-mongo)
+[![Build Status](https://img.shields.io/travis/vladimir-sudo/migrate-clickhouse.svg?style=flat)](https://travis-ci.org/vladimir-sudo/migrate-clickhouse) [![Coverage Status](https://coveralls.io/repos/github/vladimir-sudo/migrate-clickhouse/badge.svg?branch=master)](https://coveralls.io/r/vladimir-sudo/migrate-clickhouse) [![NPM](https://img.shields.io/npm/v/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) [![Downloads](https://img.shields.io/npm/dm/migrate-clickhouse.svg?style=flat)](https://www.npmjs.org/package/migrate-clickhouse) [![Dependencies](https://david-dm.org/vladimir-sudo/migrate-clickhouse.svg)](https://david-dm.org/vladimir-sudo/migrate-clickhouse) [![Known Vulnerabilities](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse/badge.svg)](https://snyk.io/test/github/vladimir-sudo/migrate-clickhouse)
 
-[![tippin.me](https://badgen.net/badge/%E2%9A%A1%EF%B8%8Ftippin.me/@seppevs/F0918E)](https://tippin.me/@seppevs)
+[![tippin.me](https://badgen.net/badge/%E2%9A%A1%EF%B8%8Ftippin.me/@vladimir-sudo/F0918E)](https://tippin.me/@vladimir-sudo)
 
-migrate-mongo is a database migration tool for MongoDB running in Node.js 
+migrate-clickhouse is a database migration tool for Clickhouse running in Node.js 
 
 </p>
     
 ## Installation
 ````bash
-$ npm install -g migrate-mongo
+$ npm install -g migrate-clickhouse
 ````
 
 ## CLI Usage
 ````
-$ migrate-mongo
-Usage: migrate-mongo [options] [command]
+$ migrate-clickhouse
+Usage: migrate-clickhouse [options] [command]
 
 
   Commands:
@@ -44,34 +44,50 @@ $ mkdir albums-migrations
 $ cd albums-migrations
 ````
 
-Initialize a new migrate-mongo project
+Initialize a new migrate-clickhouse project
 ````bash
-$ migrate-mongo init
-Initialization successful. Please edit the generated migrate-mongo-config.js file
+$ migrate-clickhouse init
+Initialization successful. Please edit the generated migrate-clickhouse-config.js file
 ````
 
 The above command did two things: 
-1. create a sample 'migrate-mongo-config.js' file and 
+1. create a sample 'migrate-clickhouse-config.js' file and 
 2. create a 'migrations' directory
 
-Edit the migrate-mongo-config.js file. An object or promise can be returned. Make sure you change the mongodb url: 
+Edit the migrate-clickhouse-config.js file. An object or promise can be returned. Make sure you change the mongodb url: 
 ````javascript
-// In this file you can configure migrate-mongo
+// In this file you can configure migrate-clickhouse
 
 module.exports = {
-  mongodb: {
-    // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost:27017",
+    clickhouse: {
+        // TODO Change (or review) the url to your Clickhouse:
+        url: "http://localhost",
 
-    // TODO Change this to your database name:
-    databaseName: "YOURDATABASENAME",
+        // TODO Change (or review) the port to your Clickhouse:
+        port: 8123,
 
-    options: {
-      useNewUrlParser: true // removes a deprecation warning when connecting
-      //   connectTimeoutMS: 3600000, // increase connection timeout to 1 hour
-      //   socketTimeoutMS: 3600000, // increase socket timeout to 1 hour
-    }
-  },
+        // TODO Change this to your database name:
+        database: "default",
+
+        basicAuth: {
+            username: 'root',
+            password: 'root',
+        },
+
+        options: {
+            // debug: false,
+            // basicAuth: null,
+            // isUseGzip: false,
+            // trimQuery: false,
+            // usePost: false,
+            // format: "json", // "json" || "csv" || "tsv"
+            // raw: false,
+            // session_id: 'session_id if need',
+            // session_timeout: 60,
+            // output_format_json_quote_64bit_integers: 0,
+            // enable_http_compression: 0,
+        }
+    },
 
   // The migrations dir, can be an relative or absolute path. Only edit this when really necessary.
   migrationsDir: "migrations",
@@ -88,41 +104,49 @@ module.exports = {
 };
 ````
 
-Alternatively, you can also encode your database name in the url (and leave out the `databaseName` property):
-````
-        url: "mongodb://localhost:27017/YOURDATABASE",
-````
-
 ### Creating a new migration script
-To create a new database migration script, just run the ````migrate-mongo create [description]```` command.
+To create a new database migration script, just run the ````migrate-clickhouse create [description]```` command.
 
 For example:
 ````bash
-$ migrate-mongo create blacklist_the_beatles
+$ migrate-clickhouse create blacklist_the_beatles
 Created: migrations/20160608155948-blacklist_the_beatles.js
 ````
 
 A new migration file is created in the 'migrations' directory:
 ````javascript
 module.exports = {
-  up(db, client) {
-    // TODO write your migration here. Return a Promise (and/or use async & await).
-    // See https://github.com/seppevs/migrate-mongo/#creating-a-new-migration-script
-    // Example:
-    // return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-  },
+    async up(client) {
+        // TODO write your migration here.
+        // See https://github.com/vladimir-sudo/migrate-clickhouse/#creating-a-new-migration-script
 
-  down(db, client) {
-    // TODO write the statements to rollback your migration (if possible)
-    // Example:
-    // return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
-  }
+        // const query = `CREATE TABLE session_temp (
+        //                           date Date,
+        //                           time DateTime,
+        //                           mark String,
+        //                           ips Array(UInt32),
+        //                           queries Nested (
+        //                               act String,
+        //                               id UInt32
+        //                           )
+        //                       )
+        //                       ENGINE=MergeTree(date, (mark, time), 8192)`;
+        //
+        // await client.query(query).toPromise();
+    },
+
+    async down(client) {
+        // TODO write the statements to rollback your migration (if possible)
+        // Example:
+        // const query = `DROP TABLE IF EXISTS session_temp`;
+        //
+        // await client.query(query).toPromise();
+    }
 };
 ````
 
 Edit this content so it actually performs changes to your database. Don't forget to write the down part as well.
-The ````db```` object contains [the official MongoDB db object](https://www.npmjs.com/package/mongodb)
-The ````client```` object is a [MongoClient](https://mongodb.github.io/node-mongodb-native/3.3/api/MongoClient.html) instance (which you can omit if you don't use it).
+The ````client```` object contains [Clickhouse db object](https://www.npmjs.com/package/clickhouse)
 
 There are 3 options to implement the `up` and `down` functions of your migration: 
 1. Return a Promises
@@ -130,19 +154,18 @@ There are 3 options to implement the `up` and `down` functions of your migration
 3. Call a callback (DEPRECATED!)
 
 Always make sure the implementation matches the function signature:
-* `function up(db, client) { /* */ }` should return `Promise`
-* `async function up(db, client) { /* */ }` should contain `await` keyword(s) and return `Promise`
-* `function up(db, client, next) { /* */ }` should callback `next`
+* `function up(client) { /* */ }` should return `Promise`
+* `async function up(client) { /* */ }` should contain `await` keyword(s) and return `Promise`
 
 #### Example 1: Return a Promise
 ````javascript
 module.exports = {
   up(db) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
+      // your code
   },
 
   down(db) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
+      // your code
   }
 };
 ````
@@ -153,30 +176,12 @@ Async & await is especially useful if you want to perform multiple operations ag
 ````javascript
 module.exports = {
   async up(db) {
-    await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}});
-    await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 5}});
+      await // your code
   },
 
   async down(db) {
-    await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 0}});
-    await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}});
+      await // your code
   },
-};
-````
-
-#### Example 3: Call a callback (deprecated)
-Callbacks are supported for backwards compatibility.
-New migration scripts should be written using Promises and/or async & await. It's easier to read and write.
-
-````javascript
-module.exports = {
-  up(db, callback) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}}, callback);
-  },
-
-  down(db, callback) {
-    return db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}}, callback);
-  }
 };
 ````
 
@@ -188,7 +193,7 @@ create a file **`sample-migration.js`** in the migrations directory.
 At any time, you can check which migrations are applied (or not)
 
 ````bash
-$ migrate-mongo status
+$ migrate-clickhouse status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
@@ -201,7 +206,7 @@ $ migrate-mongo status
 ### Migrate up
 This command will apply all pending migrations
 ````bash
-$ migrate-mongo up
+$ migrate-clickhouse up
 MIGRATED UP: 20160608155948-blacklist_the_beatles.js
 ````
 
@@ -209,7 +214,7 @@ If an an error occurred, it will stop and won't continue with the rest of the pe
 
 If we check the status again, we can see the last migration was successfully applied:
 ````bash
-$ migrate-mongo status
+$ migrate-clickhouse status
 ┌─────────────────────────────────────────┬──────────────────────────┐
 │ Filename                                │ Applied At               │
 ├─────────────────────────────────────────┼──────────────────────────┤
@@ -218,16 +223,16 @@ $ migrate-mongo status
 ````
 
 ### Migrate down
-With this command, migrate-mongo will revert (only) the last applied migration
+With this command, migrate-clickhouse will revert (only) the last applied migration
 
 ````bash
-$ migrate-mongo down
+$ migrate-clickhouse down
 MIGRATED DOWN: 20160608155948-blacklist_the_beatles.js
 ````
 
 If we check the status again, we see that the reverted migration is pending again:
 ````bash
-$ migrate-mongo status
+$ migrate-clickhouse status
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
@@ -239,12 +244,12 @@ $ migrate-mongo status
 
 ### Using a custom config file
 All actions (except ```init```) accept an optional ````-f```` or ````--file```` option to specify a path to a custom config file.
-By default, migrate-mongo will look for a ````migrate-mongo-config.js```` config file in of the current directory.
+By default, migrate-clickhouse will look for a ````migrate-clickhouse-config.js```` config file in of the current directory.
 
 #### Example:
 
 ````bash
-$ migrate-mongo status -f '~/configs/albums-migrations.js'
+$ migrate-clickhouse status -f '~/configs/albums-migrations.js'
 ┌─────────────────────────────────────────┬────────────┐
 │ Filename                                │ Applied At │
 ├─────────────────────────────────────────┼────────────┤
@@ -267,12 +272,12 @@ For example, one of the very useful [promise-fun](https://github.com/sindresorhu
 
 
 ### Using ESM (ECMAScript Modules) instead of CommonJS
-Since migrate-mongo 7.0.0, it's possible to use ESM instead of CommonJS.
+Since migrate-clickhouse 7.0.0, it's possible to use ESM instead of CommonJS.
 
 #### Using ESM when initializing a new project
 Pass the `-m esm` option to the `init` action:
 ````bash
-$ migrate-mongo init -m esm
+$ migrate-clickhouse init -m esm
 ````
 
 It's also required to have package.json file in the root of your project with `"type": "module"`.
@@ -286,49 +291,9 @@ Then edit this package.json file, and add:
 "type": "module"
 ````
 
-When you create migration files with `migrate-mongo create`, they will be prepared for you in ESM style.
+When you create migration files with `migrate-clickhouse create`, they will be prepared for you in ESM style.
 
 Please note that CommonJS is still the default module loading system.
-
-### Using MongoDB's Transactions API
-You can make use of the [MongoDB Transaction API](https://docs.mongodb.com/manual/core/transactions/) in your migration scripts.
-
-Note: this requires both:
-- MongoDB 4.0 or higher 
-- migrate-mongo 7.0.0 or higher
-
-migrate-mongo will call your migration `up` and `down` function with a second argument: `client`.
-This `client` argument is an [MongoClient](https://mongodb.github.io/node-mongodb-native/3.3/api/MongoClient.html) instance, it gives you access to the `startSession` function.
-
-Example:
-
-````javascript
-module.exports = {
-  async up(db, client) {
-    const session = client.startSession();
-    try {
-        await session.withTransaction(async () => {
-            await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: true}}, {session});
-            await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 5}}, {session});
-        });
-    } finally {
-      await session.endSession();
-    }
-  },
-
-  async down(db, client) {
-    const session = client.startSession();
-    try {
-        await session.withTransaction(async () => {
-            await db.collection('albums').updateOne({artist: 'The Beatles'}, {$set: {blacklisted: false}}, {session});
-            await db.collection('albums').updateOne({artist: 'The Doors'}, {$set: {stars: 0}}, {session});
-        });
-    } finally {
-      await session.endSession();
-    }
-  },
-};
-````
 
 ### Using a file hash algorithm to enable re-running updated files
 There are use cases where it may make sense to not treat scripts as immutable items.  An example would be a simple collection with lookup values where you just can wipe and recreate the entire collection all at the same time.
@@ -351,10 +316,10 @@ Now the status will also include the file hash in the output
 ```
 
 ### Version
-To know which version of migrate-mongo you're running, just pass the `version` option:
+To know which version of migrate-clickhouse you're running, just pass the `version` option:
 
 ````bash
-$ migrate-mongo version
+$ migrate-clickhouse version
 ````
 
 ## API Usage
@@ -368,21 +333,21 @@ const {
   up,
   down,
   status
-} = require('migrate-mongo');
+} = require('migrate-clickhouse');
 ```
 
 ### `init() → Promise`
 
-Initialize a new migrate-mongo project
+Initialize a new migrate-clickhouse project
 ```javascript
 await init();
 ```
 
 The above command did two things: 
-1. create a sample `migrate-mongo-config.js` file and 
+1. create a sample `migrate-clickhouse-config.js` file and 
 2. create a `migrations` directory
 
-Edit the `migrate-mongo-config.js` file. Make sure you change the mongodb url.
+Edit the `migrate-clickhouse-config.js` file. Make sure you change the mongodb url.
 
 ### `create(description) → Promise<fileName>`
 
@@ -396,15 +361,15 @@ A new migration file is created in the `migrations` directory.
 
 ### `database.connect() → Promise<{db: MongoDb, client: MongoClient}>`
 
-Connect to a mongo database using the connection settings from the `migrate-mongo-config.js` file.
+Connect to a clickhouse database using the connection settings from the `migrate-clickhouse-config.js` file.
 
 ```javascript
-const { db, client } = await database.connect();
+const { client } = await database.connect();
 ```
 
 ### `config.read() → Promise<JSON>`
 
-Read connection settings from the `migrate-mongo-config.js` file.
+Read connection settings from the `migrate-clickhouse-config.js` file.
 
 ```javascript
 const mongoConnectionSettings = await config.read();
@@ -412,17 +377,22 @@ const mongoConnectionSettings = await config.read();
 
 ### `config.set(yourConfigObject)`
 
-Tell migrate-mongo NOT to use the `migrate-mongo-config.js` file, but instead use the config object passed as the first argument of this function.
+Tell migrate-clickhouse NOT to use the `migrate-clickhouse-config.js` file, but instead use the config object passed as the first argument of this function.
 When using this feature, please do this at the very beginning of your program.
 
 Example:
 ```javascript
-const { config, up } = require('../lib/migrate-mongo');
+const { config, up } = require('../lib/migrate-clickhouse');
 
 const myConfig = {
-    mongodb: {
-        url: "mongodb://localhost:27017/mydatabase",
-        options: { useNewUrlParser: true }
+    clickhouse: {
+        url: "http://localhost",
+        port: 8123,
+        database: "default",
+        basicAuth: {
+            username: 'root',
+            password: 'root',
+        },
     },
     migrationsDir: "migrations",
     changelogCollectionName: "changelog",
@@ -440,8 +410,8 @@ await up();
 Apply all pending migrations
 
 ```javascript
-const { db, client } = await database.connect();
-const migrated = await up(db, client);
+const { client } = await database.connect();
+const migrated = await up(client);
 migrated.forEach(fileName => console.log('Migrated:', fileName));
 ```
 
@@ -452,8 +422,8 @@ If an an error occurred, the promise will reject and won't continue with the res
 Revert (only) the last applied migration
 
 ```javascript
-const { db, client } = await database.connect();
-const migratedDown = await down(db, client);
+const { client } = await database.connect();
+const migratedDown = await down(client);
 migratedDown.forEach(fileName => console.log('Migrated Down:', fileName));
 ```
 
@@ -462,15 +432,7 @@ migratedDown.forEach(fileName => console.log('Migrated Down:', fileName));
 Check which migrations are applied (or not.
 
 ```javascript
-const { db } = await database.connect();
-const migrationStatus = await status(db);
+const { client } = await database.connect();
+const migrationStatus = await status(client);
 migrationStatus.forEach(({ fileName, appliedAt }) => console.log(fileName, ':', appliedAt));
-```
-
-### `client.close() → Promise`
-Close the database connection
-
-```javascript
-const { db, client } = await database.connect();
-await client.close();
 ```
