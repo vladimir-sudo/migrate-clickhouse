@@ -72,7 +72,7 @@ program
         global.options = options;
         migrateClickhouse.database
             .connect()
-            .then(({db, client}) => migrateClickhouse.up(db, client))
+            .then((client) => migrateClickhouse.up(client))
             .then(migrated => {
                 printMigrated(migrated);
                 process.exit(0);
@@ -89,9 +89,10 @@ program
     .option("-f --file <file>", "use a custom config file")
     .action(options => {
         global.options = options;
+
         migrateClickhouse.database
             .connect()
-            .then(({db, client}) => migrateClickhouse.down(db, client))
+            .then((client) => migrateClickhouse.down(client))
             .then(migrated => {
                 migrated.forEach(migratedItem => {
                     console.log(`MIGRATED DOWN: ${migratedItem}`);
@@ -110,7 +111,8 @@ program
     .action(options => {
         global.options = options;
 
-        migrateClickhouse.status(migrateClickhouse.database)
+        migrateClickhouse.database.connect()
+            .then(client => migrateClickhouse.status(client))
             .then(statusItems => printStatusTable(statusItems))
             .then(() => {
                 process.exit(0);
