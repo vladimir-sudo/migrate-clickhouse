@@ -7,8 +7,6 @@
     "migrate-clickhouse": "bin/migrate-clickhouse.js"
   },
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha --recursive",
-    "test-coverage": "nyc --reporter=text-lcov mocha --recursive | coveralls",
     "lint": "eslint lib/ test/"
   },
   "author": "Vladimir Malets",
